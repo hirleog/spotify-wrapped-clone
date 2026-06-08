@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Spotify – Sua Retrospectiva de Casal</title>
+  <!-- Google Fonts para tipografia moderna -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Folha de estilos customizada -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Canvas de Confetes -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <div id="app">
+
+    <!-- 0. TELA DE INTRODUÇÃO (NOVO) -->
+    <div id="intro-view" class="view active">
+      <div class="intro-background" id="intro-bg"></div>
+      <div class="intro-overlay"></div>
+      <div class="intro-content">
+        <h2 class="intro-title" id="intro-title">Relicário</h2>
+        <p class="intro-artist" id="intro-artist">Nando Reis, Cássia Eller</p>
+        <button id="intro-play-btn" class="spotify-green-btn">
+          <svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.14v14l11-7a1 1 0 0 0 0-1.72z"/></svg>
+          PLAY
+        </button>
+      </div>
+    </div>
+    <!-- 1. TELA INICIAL (LANDING VIEW) -->
+    <div id="landing-view" class="view">
+      
+      <!-- Seção 1: Spotify Player Falso -->
+      <section class="landing-section player-section">
+        <div class="player-top-text">Eu te amo mais que tudo! ❤️🥺</div>
+        <div class="player-album-art">
+          <img src="" alt="Capa" id="landing-player-img">
+        </div>
+        <div class="player-track-info">
+          <div class="track-text">
+            <h3 id="landing-player-title">Relicário</h3>
+            <p id="landing-player-artist">Nando Reis, Cássia Eller</p>
+          </div>
+          <button class="like-btn active">
+            <svg viewBox="0 0 24 24" class="heart-icon active"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+        </div>
+        <div class="player-timeline" style="flex-direction: column; gap: 4px; align-items: stretch;">
+          <div class="timeline-bar" style="width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; position: relative;">
+            <div class="timeline-progress" id="landing-time-progress" style="background: #fff; height: 100%; width: 0%; border-radius: 2px; position: relative;">
+              <div style="position: absolute; right: -4px; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; background: #fff; border-radius: 50%; display: none;" class="progress-thumb"></div>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--spotify-muted); font-weight: 500;">
+            <span id="landing-time-current">0:00</span>
+            <span id="landing-time-total">-0:00</span>
+          </div>
+        </div>
+        <div class="player-controls-main">
+          <button class="control-btn shuffle"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg></button>
+          <button class="control-btn prev"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+          <button class="control-btn play-pause big" id="landing-play-pause">
+            <svg viewBox="0 0 24 24" id="landing-play-icon"><path fill="currentColor" d="M8 5.14v14l11-7a1 1 0 0 0 0-1.72z"/></svg>
+            <svg viewBox="0 0 24 24" id="landing-pause-icon" style="display: none;"><path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+          <button class="control-btn next"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+          <button class="control-btn repeat"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg></button>
+        </div>
+      </section>
+
+      <!-- Seção 2: Sobre o Casal -->
+      <section class="landing-section counter-section-vertical">
+        <div class="vertical-gray-card">
+          <div class="card-header-photo">
+            <h3 class="card-title-overlay">Sobre o casal</h3>
+            <img src="1.jpeg" alt="Casal" id="landing-couple-img">
+          </div>
+          <div class="card-body">
+            <h2 id="landing-couple-names">Guilherme e Thalia</h2>
+            <p class="subtitle" id="landing-couple-since">Juntos desde 2026</p>
+            
+            <div class="vertical-counter-grid">
+              <div class="vertical-counter-box">
+                <span class="val" id="landing-val-years">0</span>
+                <span class="lbl">Anos</span>
+              </div>
+              <div class="vertical-counter-box">
+                <span class="val" id="landing-val-months">0</span>
+                <span class="lbl">Meses</span>
+              </div>
+              <div class="vertical-counter-box">
+                <span class="val" id="landing-val-days">0</span>
+                <span class="lbl">Dias</span>
+              </div>
+              <div class="vertical-counter-box">
+                <span class="val" id="landing-val-hours">0</span>
+                <span class="lbl">Horas</span>
+              </div>
+              <div class="vertical-counter-box">
+                <span class="val" id="landing-val-minutes">0</span>
+                <span class="lbl">Minutos</span>
+              </div>
+              <div class="vertical-counter-box">
+                <span class="val" id="landing-val-seconds">0</span>
+                <span class="lbl">Segundos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Seção 3: Final / Retrospectiva -->
+      <section class="landing-section vertical-final-section">
+        <div class="ribbon-graphic top-ribbon"></div>
+        <div class="final-text-content">
+          <h1 class="retro-title">Sua Retrospectiva</h1>
+          <p class="retro-subtitle">Explore o seu tempo de casal</p>
+        </div>
+        <div class="ribbon-graphic bottom-ribbon"></div>
+        <div class="final-actions">
+          <button id="back-to-intro-btn" class="btn btn-secondary" style="border-radius: 30px; padding: 16px 24px; font-weight: 700; background: #8e44ad; color: #fff; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+             <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
+             Voltar
+          </button>
+          <button id="start-btn" class="spotify-btn" style="background: #3498db; color: #000; border-radius: 30px; padding: 16px 32px; font-weight: 800; border: none; cursor: pointer;">Vamos lá</button>
+        </div>
+      </section>
+    </div>
+
+
+    <!-- 2. TELA DE STORIES (STORIES VIEW) -->
+    <div id="stories-view" class="view">
+      <!-- Barras de Progresso no topo -->
+      <div class="progress-bar-container" id="progress-container">
+        <!-- Barras de progresso inseridas dinamicamente pelo JS -->
+      </div>
+
+      <!-- Barra de Controle Superior (Fechar / Mutar) -->
+      <div class="stories-header">
+        <div class="story-user-info">
+          <img src="" alt="Capa" class="story-avatar" id="story-avatar">
+          <div>
+            <span class="story-username" id="story-username">Guilherme & Thalia</span>
+            <span class="story-time">Retrospectiva</span>
+          </div>
+        </div>
+        <div class="story-controls">
+          <button id="mute-btn" class="control-btn" aria-label="Mutar música">
+            <svg viewBox="0 0 24 24" class="icon" id="mute-icon">
+              <!-- Alto falante ativado -->
+              <path fill="currentColor" d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zm-3 1.77L6.43 9H3v6h3.43L11 19V5z"/>
+            </svg>
+          </button>
+          <button id="close-btn" class="control-btn close-btn" aria-label="Fechar retrospectiva">
+            <svg viewBox="0 0 24 24" class="icon">
+              <path fill="currentColor" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Container principal dos Slides -->
+      <div class="stories-slides-wrapper" id="slides-wrapper">
+
+        <!-- SLIDE 0: CAPA (Bem-vindos) -->
+        <div class="story-slide active" id="slide-0" data-index="0">
+          <div class="slide-background"></div>
+          <div class="slide-content cover-slide">
+            <div class="polaroid-wrapper animate-slide-up">
+              <div class="polaroid-frame">
+                <img src="" alt="Foto de Capa" class="polaroid-img" id="cover-photo">
+                <div class="polaroid-tape"></div>
+              </div>
+            </div>
+            <div class="slide-texts">
+              <h2 class="slide-title font-outfit" id="cover-title">Nossa Retrospectiva</h2>
+              <p class="slide-desc" id="cover-desc">Prepare-se para reviver os nossos melhores momentos juntos...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 1: CONEXÃO -->
+        <div class="story-slide" id="slide-1" data-index="1">
+          <div class="slide-background"></div>
+          <div class="slide-content connection-slide">
+            <span class="slide-category font-outfit">NOSSA CONEXÃO</span>
+            <div class="connection-avatar animate-scale-up">
+              <img src="" alt="Conexão" id="connection-avatar">
+            </div>
+            <h2 class="section-title" id="connection-title">Nossa Conexão</h2>
+            <div class="connection-card gray-card">
+              <p id="connection-season">Estações</p>
+            </div>
+            <div class="connection-card gray-card date-card">
+              <div class="date-icon">📅</div>
+              <div>
+                <p class="label">DATA ESPECIAL</p>
+                <h3 id="connection-date">Data</h3>
+              </div>
+            </div>
+            <div class="connection-total">
+              <p class="label">TOTAL DE DIAS JUNTOS</p>
+              <h2><span id="connection-days">0</span> <span class="small">dias</span></h2>
+              <p class="top-percent" id="connection-top">Top 14%</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2: CONTADOR (Tempo juntos) -->
+        <div class="story-slide" id="slide-2" data-index="2">
+          <div class="slide-background"></div>
+          <div class="slide-content counter-slide">
+            <span class="slide-category font-outfit">SOBRE O CASAL</span>
+            <div class="couple-circular-photo animate-scale-up">
+              <img src="" alt="Nós Dois" id="counter-photo">
+            </div>
+            <div class="counter-header">
+              <h2 class="couple-names" id="counter-names">Nomes</h2>
+              <p class="couple-since" id="counter-since">Desde</p>
+            </div>
+            <div class="counter-grid">
+              <div class="counter-box animate-fade-in-up" style="animation-delay: 0.1s">
+                <span class="counter-number" id="count-years">0</span>
+                <span class="counter-label">Anos</span>
+              </div>
+              <div class="counter-box animate-fade-in-up" style="animation-delay: 0.2s">
+                <span class="counter-number" id="count-months">0</span>
+                <span class="counter-label">Meses</span>
+              </div>
+              <div class="counter-box animate-fade-in-up" style="animation-delay: 0.3s">
+                <span class="counter-number" id="count-days">0</span>
+                <span class="counter-label">Dias</span>
+              </div>
+              <div class="counter-box animate-fade-in-up" style="animation-delay: 0.4s">
+                <span class="counter-number" id="count-hours">0</span>
+                <span class="counter-label">Horas</span>
+              </div>
+              <div class="counter-box animate-fade-in-up" style="animation-delay: 0.5s">
+                <span class="counter-number" id="count-minutes">0</span>
+                <span class="counter-label">Minutos</span>
+              </div>
+              <div class="counter-box animate-fade-in-up" style="animation-delay: 0.6s">
+                <span class="counter-number" id="count-seconds">0</span>
+                <span class="counter-label">Segundos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 3: MENSAGEM -->
+        <div class="story-slide" id="slide-3" data-index="3">
+          <div class="slide-background"></div>
+          <div class="slide-content message-slide">
+            <span class="slide-category font-outfit">PARA VOCÊ</span>
+            <div class="special-message-card">
+              <h3 id="msg-title">Título</h3>
+              <p id="msg-text">Mensagem especial...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 4: PLAYER DE MÚSICA -->
+        <div class="story-slide" id="slide-4" data-index="4">
+          <div class="slide-background"></div>
+          <div class="slide-content player-slide">
+            <span class="slide-category font-outfit">A NOSSA MÚSICA</span>
+            <div class="spotify-player-card animate-scale-up">
+              <div class="player-album-art">
+                <img src="" alt="Álbum" id="player-photo">
+              </div>
+              <div class="player-meta">
+                <div class="player-info">
+                  <h3 class="track-title" id="player-track-title">Nome da Música</h3>
+                  <p class="track-artist" id="player-track-artist">Nome do Artista</p>
+                </div>
+                <button class="like-btn" id="player-like-btn" aria-label="Curtir música">
+                  <svg viewBox="0 0 24 24" class="heart-icon active">
+                    <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="player-timeline">
+                <div class="timeline-bar-wrapper">
+                  <div class="timeline-bar" id="timeline-progress-bar" style="width: 0%;"></div>
+                </div>
+                <div class="timeline-time">
+                  <span id="player-current-time">0:00</span>
+                  <span id="player-total-time">-0:00</span>
+                </div>
+              </div>
+              <div class="player-controls">
+                <button class="player-btn toggle-active" id="btn-shuffle" aria-label="Ordem aleatória"><svg viewBox="0 0 24 24" class="p-icon"><path fill="currentColor" d="M10.59 9.17L5.41 4L4 5.41l5.17 5.17l1.42-1.41zM14.5 4l2.04 2.04L4 18.59L5.41 20L17.96 7.46L20 9.5V4h-5.5zm.33 9.41l-1.41 1.41l3.13 3.13L14.5 20H20v-5.5l-2.04 2.04l-3.13-3.13z"/></svg></button>
+                <button class="player-btn" id="btn-prev" aria-label="Música anterior"><svg viewBox="0 0 24 24" class="p-icon"><path fill="currentColor" d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+                <button class="player-btn play-pause-btn" id="btn-play-pause" aria-label="Tocar ou pausar">
+                  <svg viewBox="0 0 24 24" class="p-icon-play" id="play-btn-svg"><path fill="currentColor" d="M8 5.14v14l11-7a1 1 0 0 0 0-1.72z"/></svg>
+                  <svg viewBox="0 0 24 24" class="p-icon-pause hidden" id="pause-btn-svg"><path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                </button>
+                <button class="player-btn" id="btn-next" aria-label="Próxima música"><svg viewBox="0 0 24 24" class="p-icon"><path fill="currentColor" d="M6 18l8.5-6L6 6zm9-12v12h2V6z"/></svg></button>
+                <button class="player-btn toggle-active" id="btn-repeat" aria-label="Repetir música"><svg viewBox="0 0 24 24" class="p-icon"><path fill="currentColor" d="M7 7h10v3l4-4l-4-4v3H5v6h2V7zm10 10H7v-3l-4 4l4 4v-3h12v-6h-2v4z"/></svg></button>
+              </div>
+            </div>
+            <p class="lyrics-peek-text animate-pulse">Toque para ouvir nossa música</p>
+          </div>
+        </div>
+
+        <!-- SLIDE 5: LETRAS DE MÚSICA -->
+        <div class="story-slide" id="slide-5" data-index="5">
+          <div class="slide-background"></div>
+          <div class="slide-content lyrics-slide">
+            <span class="slide-category font-outfit" id="lyrics-title-header">LETRA DA MÚSICA</span>
+            <div class="lyrics-container" id="lyrics-lines-container">
+            </div>
+            <div class="lyrics-bottom-art">
+              <img src="" alt="Arte" class="lyrics-photo" id="lyrics-photo">
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 6: LINHA DO TEMPO -->
+        <div class="story-slide" id="slide-6" data-index="6">
+          <div class="slide-background"></div>
+          <div class="slide-content timeline-story-slide" style="overflow-y: auto;">
+            <span class="slide-category font-outfit" id="timeline-story-title">NOSSA JORNADA</span>
+            <div class="timeline-container" id="timeline-story-container">
+              <!-- Gerado via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 7: CONSTELAÇÃO -->
+        <div class="story-slide" id="slide-7" data-index="7">
+          <div class="slide-background"></div>
+          <div class="slide-content constellation-slide">
+            <span class="slide-category font-outfit">O CÉU DAQUELE DIA</span>
+            <h3 class="section-title" id="const-names">Nomes</h3>
+            <div class="constellation-wrapper">
+              <img src="" alt="Mapa Estelar" id="const-img">
+            </div>
+            <p class="constellation-quote" id="const-title">O céu...</p>
+            <div class="constellation-details">
+              <p id="const-loc">Local</p>
+              <p id="const-date">Data</p>
+              <p id="const-coord">Coordenadas</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 8: MEMÓRIAS (Grid de Fotos) -->
+        <div class="story-slide" id="slide-8" data-index="8">
+          <div class="slide-background"></div>
+          <div class="slide-content grid-slide">
+            <span class="slide-category font-outfit">NOSSOS MOMENTOS</span>
+            <h2 class="grid-slide-title" id="grid-title">Melhores Memórias</h2>
+            <div class="photos-masonry-grid" id="photos-grid">
+              <!-- Grid de fotos inseridas dinamicamente pelo JS -->
+            </div>
+            <p class="grid-slide-subtitle" id="grid-desc">De muitos momentos felizes</p>
+          </div>
+        </div>
+
+        <!-- SLIDE 9: ROLETA -->
+        <div class="story-slide" id="slide-9" data-index="9">
+          <div class="slide-background"></div>
+          <div class="slide-content roulette-story-slide">
+            <span class="slide-category font-outfit">HOJE É DIA DE...</span>
+            <h2 class="section-title" id="roulette-story-title">Para onde vamos sair Hoje?</h2>
+            <div class="roulette-container">
+              <div class="roulette-pointer">▼</div>
+              <div class="roulette-wheel" id="roulette-story-wheel">
+                <!-- Gerado via JS -->
+              </div>
+              <div class="roulette-center">❤️</div>
+            </div>
+            <button class="roulette-btn" id="spin-roulette-story-btn">Girar Roleta</button>
+          </div>
+        </div>
+
+        <!-- SLIDE 10: NOSSA PLAYLIST -->
+        <div class="story-slide" id="slide-10" data-index="10">
+          <div class="slide-background"></div>
+          <div class="slide-content playlist-slide">
+            <span class="slide-category font-outfit" id="playlist-subtitle">A trilha sonora da nossa história</span>
+            <h2 class="section-title" id="playlist-title" style="margin-bottom: 30px;">Nossa Playlist</h2>
+            
+            <div class="playlist-card animate-scale-up">
+              <div class="playlist-cover-wrapper">
+                <img id="playlist-cover-img" src="" alt="Capa da Playlist">
+                <div class="spotify-logo-overlay">
+                  <svg viewBox="0 0 24 24" width="40" height="40"><path fill="#1DB954" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.6 14.4c-.2.32-.62.43-.94.23-2.58-1.58-5.83-1.94-9.66-1.06-.36.08-.72-.15-.8-.51-.08-.36.15-.72.51-.8 4.19-.96 7.78-.55 10.66 1.21.32.19.43.62.23.93zm1.32-3.13c-.25.41-.78.54-1.19.29-2.96-1.82-7.5-2.39-10.82-1.31-.46.15-.95-.1-1.1-.56-.15-.46.1-.95.56-1.1 3.82-1.24 8.84-.6 12.26 1.5.41.25.54.78.29 1.18zm.1-3.26C14.65 8 9.94 7.8 5.79 9.06c-.55.17-1.13-.15-1.3-.7-.17-.55.15-1.13.7-1.3 4.75-1.44 10.15-1.21 14.12 1.15.5.3.66.93.36 1.43-.3.5-.93.66-1.43.36z"/></svg>
+                </div>
+              </div>
+              <a href="#" id="playlist-link-btn" class="spotify-btn" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box; margin-top: 20px;">
+                Ouvir no Spotify
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 11: CARTA ROMÂNTICA -->
+        <div class="story-slide" id="slide-11" data-index="11">
+          <div class="slide-background"></div>
+          <div class="slide-content letter-slide">
+            <span class="slide-category font-outfit">PARA VOCÊ, COM AMOR</span>
+            <div class="love-letter-card animate-slide-up">
+              <div class="card-heart-stamp">❤️</div>
+              <h2 class="letter-title" id="letter-title">Meu Amor</h2>
+              <div class="letter-body-wrapper">
+                <p class="letter-text" id="letter-text">
+                  <!-- Texto da carta carregado dinamicamente -->
+                </p>
+              </div>
+            </div>
+            <div class="letter-actions">
+              <button id="replay-btn" class="btn btn-secondary">
+                <span>Ver de novo</span>
+                <svg viewBox="0 0 24 24" class="btn-icon">
+                  <path fill="currentColor" d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6s-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8s-3.58-8-8-8z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- O nav-overlay foi removido para permitir cliques nos botões. A navegação será tratada via JS no stories-view -->
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
