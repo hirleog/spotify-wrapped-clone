@@ -169,18 +169,19 @@ body {
    1. TELA INICIAL (LANDING VIEW)
    -------------------------------------------------- */
 #landing-view {
-  padding: 24px;
+  padding: 16px 12px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background: radial-gradient(circle at top right, rgba(122, 0, 255, 0.15), transparent 60%),
-              radial-gradient(circle at bottom left, rgba(255, 65, 108, 0.12), transparent 50%),
-              var(--spotify-black);
+  background: linear-gradient(180deg, #580c65 0%, #1a1a1a 40%, #000000 100%);
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
+#landing-view::-webkit-scrollbar { display: none; }
 
 .app-header {
-  padding: 10px 0;
+  padding: 10px 4px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -206,30 +207,22 @@ body {
   letter-spacing: -0.5px;
 }
 
-/* --------------------------------------------------
-   NOVO: ESTILOS DA TELA INICIAL (SCROLL VERTICAL)
-   -------------------------------------------------- */
-#landing-view {
-  overflow-y: auto;
-  background: linear-gradient(180deg, #580c65 0%, #1a1a1a 40%, #000000 100%);
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-#landing-view::-webkit-scrollbar { display: none; }
-
 .landing-section {
   display: flex;
   flex-direction: column;
-  padding: 0 20px;
-  margin-bottom: 40px;
+  padding: 0 4px;
+  margin-bottom: 30px;
 }
 
 /* Sobre o casal card */
 .vertical-gray-card {
-  background: #282828;
+  background: rgba(40, 40, 40, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.6);
   margin-top: 20px;
 }
 .card-header-photo {
@@ -423,8 +416,15 @@ body {
 
 /* Player Section */
 .player-section {
-  padding-top: 40px;
+  padding: 24px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
   align-items: center;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.6);
+  margin-top: 10px;
 }
 .player-top-text {
   font-size: 14px;
@@ -604,22 +604,76 @@ body {
 .constellation-details p { font-size: 12px; color: var(--spotify-muted); margin-bottom: 4px; letter-spacing: 1px; }
 
 /* Roulette */
+.roulette-story-slide {
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
 .roulette-section { align-items: center; }
-.roulette-container { position: relative; width: 100%; max-width: 320px; aspect-ratio: 1 / 1; height: auto; margin: 20px auto; }
-.roulette-pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); color: var(--love-pink); z-index: 10; font-size: 32px; }
-.roulette-wheel { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(var(--love-pink) 0deg 60deg, #d8819a 60deg 120deg, var(--love-pink) 120deg 180deg, #d8819a 180deg 240deg, var(--love-pink) 240deg 300deg, #d8819a 300deg 360deg); position: relative; transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1); overflow: hidden; border: 4px solid #181818; }
-.roulette-slice { position: absolute; width: 100%; height: 100%; transform-origin: 50% 50%; }
+.roulette-container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  flex-shrink: 0;
+  aspect-ratio: 1;
+  margin: 10px auto;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.roulette-container:hover {
+  transform: scale(1.03);
+}
+
+.roulette-container:active {
+  transform: scale(0.97);
+}
+
+.roulette-pointer {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--love-pink);
+  z-index: 10;
+  font-size: 32px;
+}
+
+.roulette-wheel {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(var(--love-pink) 0deg 60deg, #d8819a 60deg 120deg, var(--love-pink) 120deg 180deg, #d8819a 180deg 240deg, var(--love-pink) 240deg 300deg, #d8819a 300deg 360deg);
+  position: relative;
+  transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1);
+  overflow: hidden;
+  border: 4px solid #181818;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 65, 108, 0.15);
+}
+
+.roulette-container:hover .roulette-wheel {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 65, 108, 0.3);
+}
+
+.roulette-slice {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 50%;
+}
+
 .slice-text {
   font-size: 14px;
   font-weight: 700;
   color: #fff;
   text-transform: uppercase;
   position: absolute;
-  right: 20px;
+  right: 25px;
   top: 50%;
   transform: translateY(-50%) scale(1);
   transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), text-shadow 0.5s ease, color 0.5s ease;
 }
+
 .roulette-slice.winner .slice-text {
   transform: translateY(-50%) scale(1.35);
   color: #ffffff;
@@ -628,6 +682,7 @@ body {
   animation-delay: 0.5s;
   z-index: 10;
 }
+
 @keyframes rouletteWinnerPulse {
   0% {
     transform: translateY(-50%) scale(1.35);
@@ -638,9 +693,33 @@ body {
     text-shadow: 0 0 15px #fff, 0 0 25px var(--love-pink), 0 0 40px var(--love-pink), 0 0 50px var(--love-pink);
   }
 }
-.roulette-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: var(--love-pink); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 5; font-size: 22px; border: 3px solid #181818; }
-.roulette-btn { background: #282828; color: #fff; border: none; padding: 16px 36px; border-radius: 30px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px; transition: background 0.2s; }
-.roulette-btn:hover { background: #383838; }
+
+.roulette-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 54px;
+  height: 54px;
+  background: var(--love-pink);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  font-size: 24px;
+  border: 3px solid #181818;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.roulette-instruction-text {
+  font-size: 11px;
+  color: var(--spotify-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 15px;
+}
 
 /* Final Section */
 .final-section { align-items: center; padding: 60px 20px; border-bottom: none; }
@@ -938,9 +1017,9 @@ body {
 /* --- SLIDE 2: COUNTER --- */
 .counter-slide {
   align-items: center;
-  justify-content: flex-start;
-  gap: 16px;
-  padding-top: 75px;
+  justify-content: center;
+  gap: 20px;
+  padding-top: 80px;
 }
 
 .couple-circular-photo {
@@ -1208,53 +1287,75 @@ body {
   margin-top: 10px;
 }
 
-/* --- SLIDE 4: LYRICS --- */
+/* --- SLIDE 4: LYRICS (Synched Viewport Redesign) --- */
 .lyrics-slide {
-  justify-content: space-between;
-  align-items: flex-start;
-  padding-top: 75px;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 80px;
+  gap: 20px;
+  overflow: hidden;
 }
 
-.lyrics-container {
+.lyrics-viewport {
+  width: 100%;
   flex: 1;
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 16px;
+  mask-image: linear-gradient(to bottom, transparent 0%, white 20%, white 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, white 20%, white 80%, transparent 100%);
+}
+
+.lyrics-scroller {
   width: 100%;
-  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 40px 0;
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  will-change: transform;
 }
 
 .lyric-line {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 800;
-  line-height: 1.3;
-  color: rgba(255, 255, 255, 0.35);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: center;
   transition: all 0.4s ease;
-  transform: scale(0.95);
-  transform-origin: left;
+  transform: scale(0.9);
+  padding: 0 10px;
 }
 
 .lyric-line.active {
   color: var(--spotify-white);
-  transform: scale(1.05);
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+  transform: scale(1.08);
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
 }
 
-.lyrics-bottom-art {
+.lyrics-card-footer {
   width: 100%;
-  height: 100px;
-  border-radius: 12px;
-  overflow: hidden;
-  margin-top: 16px;
-  opacity: 0.7;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+  z-index: 5;
 }
 
-.lyrics-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.lyrics-track-badge {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--spotify-white);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 /* --- SLIDE 5: GRID DE FOTOS --- */
@@ -1320,6 +1421,13 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+/* --- SLIDE 3: MESSAGE --- */
+.message-slide {
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 }
 
 /* --- SLIDE PLAYLIST (Novo Slide 10) --- */
@@ -1667,7 +1775,8 @@ body {
     margin-bottom: 10px;
   }
   .roulette-container {
-    max-width: 250px;
+    width: 230px;
+    height: 230px;
     margin: 10px auto;
   }
   .love-letter-card {

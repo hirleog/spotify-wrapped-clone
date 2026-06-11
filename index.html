@@ -313,10 +313,16 @@
           <div class="slide-background"></div>
           <div class="slide-content lyrics-slide">
             <span class="slide-category font-outfit" id="lyrics-title-header">LETRA DA MÚSICA</span>
-            <div class="lyrics-container" id="lyrics-lines-container">
+            <div class="lyrics-viewport">
+              <div class="lyrics-scroller" id="lyrics-lines-container">
+                <!-- Gerado via JS -->
+              </div>
             </div>
-            <div class="lyrics-bottom-art">
-              <img src="" alt="Arte" class="lyrics-photo" id="lyrics-photo">
+            <div class="lyrics-card-footer">
+              <div class="lyrics-track-badge">
+                <span class="music-icon">🎵</span>
+                <span id="lyrics-track-name">Relicário</span>
+              </div>
             </div>
           </div>
         </div>
@@ -402,14 +408,14 @@
           <div class="slide-content roulette-story-slide">
             <span class="slide-category font-outfit">HOJE É DIA DE...</span>
             <h2 class="section-title" id="roulette-story-title">Para onde vamos sair Hoje?</h2>
-            <div class="roulette-container">
+            <div class="roulette-container" id="roulette-container-interactive">
               <div class="roulette-pointer">▼</div>
               <div class="roulette-wheel" id="roulette-story-wheel">
                 <!-- Gerado via JS -->
               </div>
               <div class="roulette-center">❤️</div>
             </div>
-            <button class="roulette-btn" id="spin-roulette-story-btn">Girar Roleta</button>
+            <p class="roulette-instruction-text pulse-animation">Toque na roleta para girar</p>
           </div>
         </div>
 

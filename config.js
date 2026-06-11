@@ -133,6 +133,36 @@ window.COUPLE_CONFIG = {
           description: "Já querendo o próximo",
           mediaUrl: "assets/primeiro-encontro3.webp",
           polaroidText: "🤍"
+        },
+        {
+          date: "Nossa Primeira Barraca",
+          description: "Nossa primeira aventura acampando juntinhos",
+          mediaUrl: "assets/primeira-barraca.webp",
+          polaroidText: "Primeira barraca ⛺❤️"
+        },
+        {
+          date: "Nossa Primeira Rave",
+          description: "Curtição, dança e sintonia fina",
+          mediaUrl: "assets/primeira-rave.webp",
+          polaroidText: "Primeira rave 👽🔊"
+        },
+        {
+          date: "Nosso Primeiro Carnaval",
+          description: "Muita folia, risadas e cores juntos",
+          mediaUrl: "assets/primeiro-carnaval.webp",
+          polaroidText: "Primeiro Carnaval 🎉🎭"
+        },
+        {
+          date: "Nosso Primeiro Forró",
+          description: "Aquele arrasta-pé agarradinhos bem gostoso",
+          mediaUrl: "assets/primeiro-forro.webp",
+          polaroidText: "Primeiro Forró 🪗💃"
+        },
+        {
+          date: "Halloween",
+          description: "Nossa festa à fantasia divertida e inesquecível",
+          mediaUrl: "assets/halloween1.webp",
+          polaroidText: "Halloween 🎃👻"
         }
       ],
       gradient: "linear-gradient(135deg, #242424, #121212)"

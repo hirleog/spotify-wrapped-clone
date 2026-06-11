@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
      ESTADO DA APLICAÇÃO
      -------------------------------------------------- */
   let currentSlideIndex = 0;
+  let currentTimelineMomentIndex = 0;
   const slideDuration = 8500; // Tempo de cada slide em ms (8.5 segundos)
   let progressTime = 0; // Progresso atual do slide em ms
   let lastFrameTime = 0;
@@ -99,38 +100,45 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#slide-4 .slide-background").style.background = config.slides[4].gradient;
 
     // 6. SLIDE 5: Letra da Música
-    document.getElementById("lyrics-photo").src = config.slides[5].imageUrl;
     document.querySelector("#slide-5 .slide-background").style.background = config.slides[5].gradient;
     const lyricsContainer = document.getElementById("lyrics-lines-container");
-    lyricsContainer.innerHTML = config.slides[5].lyrics.map((line, idx) => `
-      <div class="lyric-line" id="lyric-line-${idx}">${line}</div>
-    `).join("");
+    if (lyricsContainer) {
+      lyricsContainer.innerHTML = config.slides[5].lyrics.map((line, idx) => `
+        <div class="lyric-line" id="lyric-line-${idx}">${line}</div>
+      `).join("");
+    }
+    const lyricsTrackName = document.getElementById("lyrics-track-name");
+    if (lyricsTrackName) {
+      lyricsTrackName.textContent = `${config.music.title} – ${config.music.artist}`;
+    }
 
     // 7. SLIDE 6: Timeline
     document.getElementById("timeline-story-title").textContent = config.slides[6].title;
     document.querySelector("#slide-6 .slide-background").style.background = config.slides[6].gradient;
     const timelineContainer = document.getElementById("timeline-story-container");
-    timelineContainer.innerHTML = config.slides[6].events.map((ev, index) => {
-      const isRight = index % 2 !== 0;
-      const mediaHtml = ev.mediaUrl.endsWith(".mp4") 
-        ? `<video src="${ev.mediaUrl}" autoplay loop muted playsinline></video>`
-        : `<img src="${ev.mediaUrl}" alt="Memória">`;
-      return `
-        <div class="timeline-item ${isRight ? 'right' : 'left'}">
-          <div class="timeline-dot">❤</div>
-          <div class="timeline-content polaroid-wrapper">
-            <div class="polaroid">
-              <div class="polaroid-media">${mediaHtml}</div>
-              <div class="polaroid-text">${ev.polaroidText}</div>
+    if (timelineContainer) {
+      timelineContainer.innerHTML = config.slides[6].events.map((ev, index) => {
+        const isRight = index % 2 !== 0;
+        const mediaHtml = ev.mediaUrl.endsWith(".mp4") 
+          ? `<video src="${ev.mediaUrl}" autoplay loop muted playsinline></video>`
+          : `<img src="${ev.mediaUrl}" alt="Memória">`;
+        return `
+          <div class="timeline-item ${isRight ? 'right' : 'left'}">
+            <div class="timeline-dot">❤</div>
+            <div class="timeline-content polaroid-wrapper">
+              <div class="polaroid">
+                <div class="polaroid-media">${mediaHtml}</div>
+                <div class="polaroid-text">${ev.polaroidText}</div>
+              </div>
+            </div>
+            <div class="timeline-text">
+              <div class="timeline-date">${ev.date}</div>
+              <div class="timeline-desc">${ev.description}</div>
             </div>
           </div>
-          <div class="timeline-text">
-            <div class="timeline-date">${ev.date}</div>
-            <div class="timeline-desc">${ev.description}</div>
-          </div>
-        </div>
-      `;
-    }).join("");
+        `;
+      }).join("");
+    }
 
     // 8. SLIDE 7: Álbum de Figurinhas
     document.getElementById("album-story-title").textContent = config.slides[7].title;
@@ -240,10 +248,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // Hooks específicos de cada slide em tempo real
-      if (currentSlideIndex === 2) {
+      const currentSlideType = config.slides[currentSlideIndex]?.type;
+      if (currentSlideType === "player") {
         // Player de música: atualizar barra de progresso do player
         updatePlayerTimeline();
-      } else if (currentSlideIndex === 3) {
+      } else if (currentSlideType === "lyrics") {
         // Letra de música: destacar as frases
         updateLyricsHighlight(percent);
       }
@@ -312,20 +321,22 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    if (currentSlideIndex === 1) {
+    const currentSlideType = config.slides[currentSlideIndex]?.type;
+
+    if (currentSlideType === "counter") {
       // Iniciar Contador de Tempo
       startCounter();
-    } else if (currentSlideIndex === 2) {
+    } else if (currentSlideType === "player") {
       // Garantir sincronia do play/pause
       syncPlayerButton();
-    } else if (currentSlideIndex === 5) {
+    } else if (currentSlideType === "letter") {
       // Disparar confetes de coração no final
       startHearts();
     }
 
     startStoryLoop();
     
-    if (currentSlideIndex === 7) {
+    if (currentSlideType === "album") {
       // Álbum de Figurinhas: resetar figurinhas e pausar story para folhear
       document.querySelectorAll(".album-card").forEach(c => c.classList.remove("removed"));
       pauseStory(); 
@@ -475,12 +486,17 @@ document.addEventListener("DOMContentLoaded", () => {
      LETRA DA MÚSICA (SLIDE 4)
      -------------------------------------------------- */
   function updateLyricsHighlight(percent) {
-    const linesCount = config.slides[3].lyrics.length;
+    const lyricsSlide = config.slides.find(s => s.type === "lyrics");
+    if (!lyricsSlide || !lyricsSlide.lyrics) return;
+    const linesCount = lyricsSlide.lyrics.length;
     if (linesCount === 0) return;
 
     // Distribuir as linhas proporcionalmente ao tempo do slide (de 0 a 100%)
     const pctPerLine = 100 / linesCount;
-    const activeLineIndex = Math.floor(percent / pctPerLine);
+    const activeLineIndex = Math.min(Math.floor(percent / pctPerLine), linesCount - 1);
+
+    const scroller = document.getElementById("lyrics-lines-container");
+    const viewport = document.querySelector(".lyrics-viewport");
 
     for (let i = 0; i < linesCount; i++) {
       const lineEl = document.getElementById(`lyric-line-${i}`);
@@ -490,6 +506,15 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           lineEl.classList.remove("active");
         }
+      }
+    }
+
+    // Scroll active line to center
+    if (scroller && viewport) {
+      const activeEl = document.getElementById(`lyric-line-${activeLineIndex}`);
+      if (activeEl) {
+        const offset = activeEl.offsetTop - (viewport.clientHeight / 2) + (activeEl.clientHeight / 2);
+        scroller.style.transform = `translateY(${-offset}px)`;
       }
     }
   }
@@ -749,11 +774,14 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Roleta nos Stories
-  const spinBtn = document.getElementById("spin-roulette-story-btn");
-  if(spinBtn) {
+  const rouletteContainer = document.getElementById("roulette-container-interactive");
+  if (rouletteContainer) {
     let clickCount = 0;
-    spinBtn.addEventListener("click", (e) => {
+    let isSpinning = false;
+    rouletteContainer.addEventListener("click", (e) => {
       e.stopPropagation(); // Evita que o click avance o story
+      if (isSpinning) return;
+      isSpinning = true;
       clickCount++;
       
       const wheel = document.getElementById("roulette-story-wheel");
@@ -765,8 +793,6 @@ document.addEventListener("DOMContentLoaded", () => {
         previousWinner.classList.remove("winner");
       }
       
-      spinBtn.textContent = "Girando...";
-      spinBtn.disabled = true;
       isPaused = true; // Pausa o story enquanto roda
       
       // Sempre parar no Cinema (Índice 3 = 180deg). 
@@ -779,8 +805,7 @@ document.addEventListener("DOMContentLoaded", () => {
       wheel.style.transform = `rotate(${finalDeg}deg)`;
       
       setTimeout(() => {
-        spinBtn.textContent = "Girar Novamente";
-        spinBtn.disabled = false;
+        isSpinning = false;
         isPaused = false; // Retoma o story
         
         // Adicionar classe de destaque na opção sorteada (Cinema - index 3)
@@ -792,13 +817,15 @@ document.addEventListener("DOMContentLoaded", () => {
         // Efeito celebration com corações de confete por 3 segundos
         startHearts();
         setTimeout(() => {
-          if (currentSlideIndex === 12) {
+          if (config.slides[currentSlideIndex]?.type === "roulette") {
             stopHearts();
           }
         }, 3000);
       }, 4000);
     });
   }
+
+
 
   // Iniciar retrospectiva
   startBtn.addEventListener("click", enterStories);
@@ -855,7 +882,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Navegação pelos Stories (Toques Esquerdo/Direito)
   storiesView.addEventListener("click", (e) => {
     // Lidar com o Álbum de Figurinhas
-    if (currentSlideIndex === 7) {
+    const currentSlideType = config.slides[currentSlideIndex]?.type;
+    if (currentSlideType === "album") {
       const albumCard = e.target.closest(".album-card:not(.removed)");
       if (albumCard) {
         albumCard.classList.add("removed");
@@ -868,21 +896,22 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Ignorar cliques em botões, links, controles, barra de progresso ou área scrollável
+    // Ignorar cliques em botões, links, controles, roleta, barra de progresso ou área scrollável
     if (e.target.closest("button") || 
         e.target.closest("a") || 
         e.target.closest(".player-controls") ||
         e.target.closest(".like-btn") ||
-        e.target.closest(".stories-header")) {
+        e.target.closest(".stories-header") ||
+        e.target.closest("#roulette-container-interactive")) {
       return;
     }
     const rect = storiesView.getBoundingClientRect();
     const x = e.clientX - rect.left;
     if (x < rect.width * 0.3) {
-      if (currentSlideIndex === 7) resumeStory();
+      if (currentSlideType === "album" || currentSlideType === "timeline") resumeStory();
       prevSlide();
     } else {
-      if (currentSlideIndex === 7) resumeStory();
+      if (currentSlideType === "album" || currentSlideType === "timeline") resumeStory();
       nextSlide();
     }
   });
