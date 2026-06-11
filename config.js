@@ -81,7 +81,7 @@ window.COUPLE_CONFIG = {
       id: "slide-message",
       type: "message",
       title: "Mensagem especial",
-      text: "Tudo ainda é muito novo, mas você já trouxe uma cor muito especial pros meus dias ❤️. E o melhor de tudo é que...",
+      text: "Tudo ainda é muito novo, mas você já trouxe uma cor muito especial pros meus dias ❤️. Tem sido incrível compartilhar essas descobertas com você e curtir cada momento bom. Que venham muitas outras memórias incríveis pra gente viver!",
       gradient: "linear-gradient(135deg, #d32f2f, #9a0007)"
     },
     {

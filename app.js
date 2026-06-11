@@ -69,8 +69,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // 2. SLIDE 1: Nossa Conexão
     document.getElementById("connection-avatar").src = config.slides[1].avatarUrl;
     document.getElementById("connection-season").textContent = config.slides[1].seasonText;
-    document.getElementById("connection-date").textContent = config.slides[1].specialDateText;
-    document.getElementById("connection-days").textContent = config.slides[1].totalDays;
+    const optionsDate = { day: 'numeric', month: 'long' };
+    document.getElementById("connection-date").textContent = config.startDate.toLocaleDateString('pt-BR', optionsDate);
+    
+    // Cálculo de dias dinâmico
+    let diffTime = new Date() - config.startDate;
+    if (diffTime < 0) diffTime = 0;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    document.getElementById("connection-days").textContent = diffDays;
+    
     document.getElementById("connection-top").textContent = config.slides[1].topPercentage;
     document.querySelector("#slide-1 .slide-background").style.background = config.slides[1].gradient;
 
