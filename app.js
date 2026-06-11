@@ -125,30 +125,51 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
     }).join("");
 
-    // 8. SLIDE 7: Constelação
-    document.getElementById("const-names").textContent = `${config.partner1} e ${config.partner2}`;
-    document.getElementById("const-img").src = config.slides[7].imageUrl;
-    document.getElementById("const-title").textContent = config.slides[7].title;
-    document.getElementById("const-loc").textContent = config.slides[7].location;
-    document.getElementById("const-date").textContent = config.slides[7].date;
-    document.getElementById("const-coord").textContent = config.slides[7].coordinates;
+    // 8. SLIDE 7: Álbum de Figurinhas
+    document.getElementById("album-story-title").textContent = config.slides[7].title;
+    document.getElementById("album-story-subtitle").textContent = config.slides[7].subtitle;
+    const albumContainer = document.getElementById("album-container");
+    albumContainer.innerHTML = config.slides[7].images.map((imgUrl, i) => `
+      <div class="album-card" style="z-index: ${config.slides[7].images.length - i};">
+        <img src="${imgUrl}" alt="Foto ${i+1}">
+      </div>
+    `).join("");
     document.querySelector("#slide-7 .slide-background").style.background = config.slides[7].gradient;
 
-    // 9. SLIDE 8: Grid de Fotos
-    document.getElementById("grid-title").textContent = config.slides[8].title;
-    document.getElementById("grid-desc").textContent = config.slides[8].subtitle;
+    // 9. SLIDE 8: Vídeo 1
+    document.getElementById("video1-title").textContent = config.slides[8].title;
+    document.getElementById("video1-player").src = config.slides[8].videoUrl;
+    document.querySelector("#slide-8 .slide-background").style.background = config.slides[8].gradient;
+
+    // 10. SLIDE 9: Vídeo 2
+    document.getElementById("video2-title").textContent = config.slides[9].title;
+    document.getElementById("video2-player").src = config.slides[9].videoUrl;
+    document.querySelector("#slide-9 .slide-background").style.background = config.slides[9].gradient;
+
+    // 11. SLIDE 10: Constelação
+    document.getElementById("const-names").textContent = `${config.partner1} e ${config.partner2}`;
+    document.getElementById("const-img").src = config.slides[10].imageUrl;
+    document.getElementById("const-title").textContent = config.slides[10].title;
+    document.getElementById("const-loc").textContent = config.slides[10].location;
+    document.getElementById("const-date").textContent = config.slides[10].date;
+    document.getElementById("const-coord").textContent = config.slides[10].coordinates;
+    document.querySelector("#slide-10 .slide-background").style.background = config.slides[10].gradient;
+
+    // 12. SLIDE 11: Grid de Fotos
+    document.getElementById("grid-title").textContent = config.slides[11].title;
+    document.getElementById("grid-desc").textContent = config.slides[11].subtitle;
     const photosGrid = document.getElementById("photos-grid");
-    photosGrid.innerHTML = config.slides[8].images.map(imgUrl => `
+    photosGrid.innerHTML = config.slides[11].images.map(imgUrl => `
       <div class="grid-photo-item">
         <img src="${imgUrl}" alt="Memória">
       </div>
     `).join("");
-    document.querySelector("#slide-8 .slide-background").style.background = config.slides[8].gradient;
+    document.querySelector("#slide-11 .slide-background").style.background = config.slides[11].gradient;
 
-    // 10. SLIDE 9: Roleta
-    document.getElementById("roulette-story-title").textContent = config.slides[9].title;
+    // 13. SLIDE 12: Roleta
+    document.getElementById("roulette-story-title").textContent = config.slides[12].title;
     const rouletteWheel = document.getElementById("roulette-story-wheel");
-    const options = config.slides[9].options;
+    const options = config.slides[12].options;
     const sliceAngle = 360 / options.length;
     rouletteWheel.innerHTML = options.map((opt, i) => {
       const rotate = i * sliceAngle;
@@ -158,19 +179,19 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       `;
     }).join("");
-    document.querySelector("#slide-9 .slide-background").style.background = config.slides[9].gradient;
+    document.querySelector("#slide-12 .slide-background").style.background = config.slides[12].gradient;
 
-    // 11. SLIDE 10: Nossa Playlist
-    document.getElementById("playlist-title").textContent = config.slides[10].title;
-    document.getElementById("playlist-subtitle").textContent = config.slides[10].subtitle;
-    document.getElementById("playlist-cover-img").src = config.slides[10].imageUrl;
-    document.getElementById("playlist-link-btn").href = config.slides[10].playlistUrl;
-    document.querySelector("#slide-10 .slide-background").style.background = config.slides[10].gradient;
+    // 14. SLIDE 13: Nossa Playlist
+    document.getElementById("playlist-title").textContent = config.slides[13].title;
+    document.getElementById("playlist-subtitle").textContent = config.slides[13].subtitle;
+    document.getElementById("playlist-cover-img").src = config.slides[13].imageUrl;
+    document.getElementById("playlist-link-btn").href = config.slides[13].playlistUrl;
+    document.querySelector("#slide-13 .slide-background").style.background = config.slides[13].gradient;
 
-    // 12. SLIDE 11: Carta Romântica
-    document.getElementById("letter-title").textContent = config.slides[11].title;
-    document.getElementById("letter-text").textContent = config.slides[11].letter;
-    document.querySelector("#slide-11 .slide-background").style.background = config.slides[11].gradient;
+    // 15. SLIDE 14: Carta Romântica
+    document.getElementById("letter-title").textContent = config.slides[14].title;
+    document.getElementById("letter-text").textContent = config.slides[14].letter;
+    document.querySelector("#slide-14 .slide-background").style.background = config.slides[14].gradient;
 
     // 9. Criar as Barras de Progresso no topo dos Stories
     progressContainer.innerHTML = config.slides.map((_, index) => `
@@ -222,6 +243,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Ao finalizar o slide, avançar
       if (progressTime >= slideDuration) {
+        if (currentSlideIndex === config.slides.length - 1) {
+          // Último slide é infinito, então não avança.
+          // A barra já estará em 100%. Encerramos o loop de frame aqui.
+          return;
+        }
         nextSlide();
         return;
       }
@@ -266,8 +292,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // Parar efeitos de outros slides
     clearInterval(counterInterval);
     stopHearts();
+    // Parar todos os vídeos
+    document.querySelectorAll("video").forEach(v => v.pause());
 
     // Executar ações do slide atual
+    const activeSlide = document.querySelector(`.story-slide[data-index="${currentSlideIndex}"]`);
+    if (activeSlide) {
+      const videos = activeSlide.querySelectorAll("video");
+      videos.forEach(v => {
+        v.currentTime = 0;
+        v.play().catch(e => console.log("Erro ao tocar vídeo:", e));
+      });
+    }
+
     if (currentSlideIndex === 1) {
       // Iniciar Contador de Tempo
       startCounter();
@@ -280,6 +317,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     startStoryLoop();
+    
+    if (currentSlideIndex === 7) {
+      // Álbum de Figurinhas: resetar figurinhas e pausar story para folhear
+      document.querySelectorAll(".album-card").forEach(c => c.classList.remove("removed"));
+      pauseStory(); 
+    }
   }
 
   function nextSlide() {
@@ -742,7 +785,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Efeito celebration com corações de confete por 3 segundos
         startHearts();
         setTimeout(() => {
-          if (currentSlideIndex === 9) {
+          if (currentSlideIndex === 12) {
             stopHearts();
           }
         }, 3000);
@@ -758,7 +801,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Replay da retrospectiva
   document.getElementById("replay-btn").addEventListener("click", () => {
-    audio.currentTime = 0; // Reinicia a música se recomeçar a retrospectiva daqui
     goToSlide(0);
   });
 
@@ -805,6 +847,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Navegação pelos Stories (Toques Esquerdo/Direito)
   storiesView.addEventListener("click", (e) => {
+    // Lidar com o Álbum de Figurinhas
+    if (currentSlideIndex === 7) {
+      const albumCard = e.target.closest(".album-card:not(.removed)");
+      if (albumCard) {
+        albumCard.classList.add("removed");
+        const remaining = document.querySelectorAll("#album-container .album-card:not(.removed)");
+        if (remaining.length === 0) {
+          resumeStory(); // Volta o andamento normal da barra de progresso
+          nextSlide();
+        }
+        return;
+      }
+    }
+
     // Ignorar cliques em botões, links, controles, barra de progresso ou área scrollável
     if (e.target.closest("button") || 
         e.target.closest("a") || 
@@ -816,8 +872,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const rect = storiesView.getBoundingClientRect();
     const x = e.clientX - rect.left;
     if (x < rect.width * 0.3) {
+      if (currentSlideIndex === 7) resumeStory();
       prevSlide();
     } else {
+      if (currentSlideIndex === 7) resumeStory();
       nextSlide();
     }
   });

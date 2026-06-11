@@ -776,13 +776,7 @@ body {
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), 
               opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-  overflow-y: auto;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-.story-slide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+  overflow: hidden;
 }
 
 .slide-background {
@@ -822,13 +816,20 @@ body {
 /* Conteúdo interno do slide */
 .slide-content {
   width: 100%;
-  min-height: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding-top: 80px; /* espaço para o header */
   padding-bottom: 20px;
   z-index: 2;
+  overflow-y: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.slide-content::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }
 
 .slide-category {
@@ -1452,6 +1453,76 @@ body {
 
 .btn-secondary:active {
   transform: scale(0.96);
+}
+
+/* --- SLIDE ÁLBUM DE FIGURINHAS --- */
+.album-slide {
+  justify-content: center;
+  align-items: center;
+}
+.album-container {
+  position: relative;
+  width: 280px;
+  height: 380px;
+  perspective: 1000px;
+  margin-top: 20px;
+}
+.album-card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  padding: 10px 10px 40px 10px;
+  border-radius: 4px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.6s ease;
+  transform-origin: center center;
+  display: flex;
+  flex-direction: column;
+}
+.album-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+.album-card.removed {
+  transform: translateX(120%) rotate(20deg) !important;
+  opacity: 0;
+  pointer-events: none;
+}
+.album-instruction {
+  margin-top: 30px;
+  font-size: 13px;
+  color: var(--spotify-muted);
+}
+.pulse-animation {
+  animation: pulseOpacity 2s infinite;
+}
+@keyframes pulseOpacity {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* --- VÍDEO SLIDES --- */
+.video-slide-container {
+  padding: 0;
+  overflow: hidden;
+}
+.video-slide-container .slide-content {
+  padding-top: 40px;
+  align-items: center;
+  justify-content: flex-start;
+}
+.bg-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0.8;
 }
 
 /* --------------------------------------------------
