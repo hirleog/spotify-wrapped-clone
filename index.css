@@ -432,8 +432,10 @@ body {
   margin-bottom: 20px;
 }
 .player-album-art {
-  width: 280px;
-  height: 280px;
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 1 / 1;
+  height: auto;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -596,18 +598,46 @@ body {
 
 /* Constellation */
 .constellation-section { align-items: center; text-align: center; }
-.constellation-wrapper { width: 280px; height: 280px; border-radius: 50%; overflow: hidden; margin: 20px 0; border: 1px solid rgba(255,255,255,0.1); }
+.constellation-wrapper { width: 100%; max-width: 280px; aspect-ratio: 1 / 1; height: auto; border-radius: 50%; overflow: hidden; margin: 20px auto; border: 1px solid rgba(255,255,255,0.1); }
 .constellation-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 .constellation-quote { font-family: var(--font-display); font-size: 18px; font-weight: 700; margin-bottom: 20px; }
 .constellation-details p { font-size: 12px; color: var(--spotify-muted); margin-bottom: 4px; letter-spacing: 1px; }
 
 /* Roulette */
 .roulette-section { align-items: center; }
-.roulette-container { position: relative; width: 320px; height: 320px; margin: 20px auto; }
+.roulette-container { position: relative; width: 100%; max-width: 320px; aspect-ratio: 1 / 1; height: auto; margin: 20px auto; }
 .roulette-pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); color: var(--love-pink); z-index: 10; font-size: 32px; }
 .roulette-wheel { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(var(--love-pink) 0deg 60deg, #d8819a 60deg 120deg, var(--love-pink) 120deg 180deg, #d8819a 180deg 240deg, var(--love-pink) 240deg 300deg, #d8819a 300deg 360deg); position: relative; transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1); overflow: hidden; border: 4px solid #181818; }
 .roulette-slice { position: absolute; width: 100%; height: 100%; transform-origin: 50% 50%; }
-.slice-text { font-size: 14px; font-weight: 700; color: #fff; text-transform: uppercase; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); }
+.slice-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%) scale(1);
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), text-shadow 0.5s ease, color 0.5s ease;
+}
+.roulette-slice.winner .slice-text {
+  transform: translateY(-50%) scale(1.35);
+  color: #ffffff;
+  text-shadow: 0 0 10px #fff, 0 0 20px var(--love-pink), 0 0 30px var(--love-pink);
+  animation: rouletteWinnerPulse 1.2s infinite alternate ease-in-out;
+  animation-delay: 0.5s;
+  z-index: 10;
+}
+@keyframes rouletteWinnerPulse {
+  0% {
+    transform: translateY(-50%) scale(1.35);
+    text-shadow: 0 0 10px #fff, 0 0 20px var(--love-pink), 0 0 30px var(--love-pink);
+  }
+  100% {
+    transform: translateY(-50%) scale(1.45);
+    text-shadow: 0 0 15px #fff, 0 0 25px var(--love-pink), 0 0 40px var(--love-pink), 0 0 50px var(--love-pink);
+  }
+}
 .roulette-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: var(--love-pink); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 5; font-size: 22px; border: 3px solid #181818; }
 .roulette-btn { background: #282828; color: #fff; border: none; padding: 16px 36px; border-radius: 30px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px; transition: background 0.2s; }
 .roulette-btn:hover { background: #383838; }
@@ -746,10 +776,17 @@ body {
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), 
               opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  overflow-y: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.story-slide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }
 
 .slide-background {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -785,7 +822,7 @@ body {
 /* Conteúdo interno do slide */
 .slide-content {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1494,11 +1531,36 @@ body {
   }
 }
 
-/* Correções para telas muito curtas (iPhone SE, etc) */
-@media (max-height: 600px) {
+/* Correções para telas mais curtas (iPhone SE, etc) e ajuste de escala geral para mobile */
+@media (max-height: 760px) {
+  .slide-content {
+    padding-top: 70px;
+    padding-bottom: 15px;
+  }
+  .story-slide {
+    padding: 16px 20px;
+  }
+  .slide-title {
+    font-size: 22px;
+  }
+  .slide-desc {
+    font-size: 13px;
+  }
+  .connection-avatar {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
+  }
+  .connection-total h2 {
+    font-size: 38px;
+  }
+  .gray-card {
+    padding: 12px;
+    margin-bottom: 10px;
+  }
   .counter-slide {
-    padding-top: 60px;
-    gap: 8px;
+    padding-top: 65px;
+    gap: 10px;
   }
   .couple-circular-photo {
     width: 90px;
@@ -1506,6 +1568,7 @@ body {
   }
   .counter-grid {
     gap: 6px;
+    margin-top: 6px;
   }
   .counter-box {
     padding: 8px 4px;
@@ -1517,7 +1580,33 @@ body {
     gap: 10px;
     padding: 15px;
   }
+  .player-slide {
+    gap: 15px;
+    padding-top: 70px;
+  }
   .photos-masonry-grid {
     gap: 8px;
+  }
+  .constellation-wrapper {
+    max-width: 210px;
+    margin: 10px auto;
+  }
+  .constellation-quote {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  .roulette-container {
+    max-width: 250px;
+    margin: 10px auto;
+  }
+  .love-letter-card {
+    padding: 16px;
+    gap: 10px;
+  }
+  .letter-title {
+    font-size: 18px;
+  }
+  .letter-text {
+    font-size: 13px;
   }
 }

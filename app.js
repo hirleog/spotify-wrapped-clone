@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
     rouletteWheel.innerHTML = options.map((opt, i) => {
       const rotate = i * sliceAngle;
       return `
-        <div class="roulette-slice" style="transform: rotate(${rotate}deg);">
+        <div class="roulette-slice" style="transform: rotate(${rotate}deg);" data-index="${i}">
           <span class="slice-text">${opt}</span>
         </div>
       `;
@@ -707,6 +707,14 @@ document.addEventListener("DOMContentLoaded", () => {
       clickCount++;
       
       const wheel = document.getElementById("roulette-story-wheel");
+      
+      // Resetar estado anterior
+      stopHearts();
+      const previousWinner = wheel.querySelector(".winner");
+      if (previousWinner) {
+        previousWinner.classList.remove("winner");
+      }
+      
       spinBtn.textContent = "Girando...";
       spinBtn.disabled = true;
       isPaused = true; // Pausa o story enquanto roda
@@ -724,6 +732,20 @@ document.addEventListener("DOMContentLoaded", () => {
         spinBtn.textContent = "Girar Novamente";
         spinBtn.disabled = false;
         isPaused = false; // Retoma o story
+        
+        // Adicionar classe de destaque na opção sorteada (Cinema - index 3)
+        const winnerSlice = wheel.querySelector('[data-index="3"]');
+        if (winnerSlice) {
+          winnerSlice.classList.add("winner");
+        }
+        
+        // Efeito celebration com corações de confete por 3 segundos
+        startHearts();
+        setTimeout(() => {
+          if (currentSlideIndex === 9) {
+            stopHearts();
+          }
+        }, 3000);
       }, 4000);
     });
   }
