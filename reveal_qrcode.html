@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Algo Especial Para Você – Escaneie para Revelar</title>
+  <link rel="icon" type="image/png" href="https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --spotify-black: #121212;
+      --spotify-green: #1db954;
+      --neon-pink: #ff416c;
+      --neon-purple: #7a00ff;
+      --font-display: 'Outfit', sans-serif;
+      --font-main: 'Montserrat', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--spotify-black);
+      color: #ffffff;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Background mysterious canvas / image */
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('assets/mysterious_bg.png') no-repeat center center;
+      background-size: cover;
+      filter: brightness(0.85);
+      z-index: 1;
+      animation: zoomSlow 20s infinite alternate ease-in-out;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(18,18,18,0.8) 80%);
+      z-index: 2;
+    }
+
+    /* Main Container */
+    .container {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      max-width: 90%;
+      width: 450px;
+    }
+
+    /* Glowing Card for QR Code */
+    .qr-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 
+                  0 0 40px rgba(122, 0, 255, 0.15);
+      animation: cardPulse 4s infinite ease-in-out;
+    }
+
+    /* QR Frame */
+    .qr-frame {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.8), 
+                  0 0 50px rgba(255, 65, 108, 0.4),
+                  0 0 80px rgba(122, 0, 255, 0.3);
+      transition: transform 0.3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .qr-frame img {
+      width: 200px;
+      height: 200px;
+      display: block;
+      border-radius: 8px;
+    }
+
+    /* Soft pulse glow ring */
+    .qr-frame::after {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: -6px;
+      right: -6px;
+      bottom: -6px;
+      border-radius: 26px;
+      border: 2px solid transparent;
+      background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple)) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      opacity: 0.8;
+      animation: rotateGlow 4s linear infinite;
+    }
+
+    /* Text design */
+    h1 {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 40%, #ffc3d0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 8px;
+      font-weight: 400;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .heart-icon {
+      color: var(--neon-pink);
+      display: inline-block;
+      animation: heartbeat 1.2s infinite ease-in-out;
+      font-size: 18px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+    }
+
+    /* Download Button */
+    .download-btn {
+      background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+      color: #ffffff;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 28px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(255, 65, 108, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 10px;
+    }
+
+    .download-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 6px 20px rgba(255, 65, 108, 0.5);
+    }
+
+    .download-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Floating particles background */
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: floatUp 15s infinite linear;
+      opacity: 0;
+    }
+
+    /* Animations */
+    @keyframes zoomSlow {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.08); }
+    }
+
+    @keyframes cardPulse {
+      0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(122, 0, 255, 0.15);
+      }
+      50% {
+        transform: translateY(-8px);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 55px rgba(255, 65, 108, 0.25);
+      }
+    }
+
+    @keyframes rotateGlow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      25% { transform: scale(1.15); }
+      40% { transform: scale(1.05); }
+      60% { transform: scale(1.2); }
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(105vh) translateX(0) scale(0.5);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.6;
+      }
+      90% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-5vh) translateX(50px) scale(1.2);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="background"></div>
+  <div class="overlay"></div>
+
+  <!-- Partículas flutuantes -->
+  <div class="particles" id="particles-container"></div>
+
+  <div class="container">
+    <div class="qr-card">
+      <div class="qr-frame">
+        <img id="qr-image" src="qrcode_retrospectiva.png" alt="Código QR da Retrospectiva">
+      </div>
+      
+      <h1>Algo especial para você...</h1>
+      <p>Aponte a câmera do seu celular para descobrir.</p>
+      <div class="heart-icon">❤️</div>
+      
+      <button class="download-btn" id="download-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Baixar Imagem Estática
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Gerar algumas partículas misteriosas flutuantes
+    const container = document.getElementById('particles-container');
+    const particleCount = 20;
+
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      
+      // Tamanhos e posições aleatórias
+      const size = Math.random() * 8 + 4;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.left = `${Math.random() * 100}vw`;
+      
+      // Delay e velocidade aleatórios
+      particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+      particle.style.animationDelay = `${Math.random() * 10}s`;
+      
+      // Cores (pink, purple ou branco brilhante)
+      const colorType = Math.floor(Math.random() * 3);
+      if (colorType === 0) {
+        particle.style.background = 'radial-gradient(circle, rgba(255, 65, 108, 0.8) 0%, rgba(255, 65, 108, 0) 70%)';
+      } else if (colorType === 1) {
+        particle.style.background = 'radial-gradient(circle, rgba(122, 0, 255, 0.8) 0%, rgba(122, 0, 255, 0) 70%)';
+      } else {
+        particle.style.background = 'radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 70%)';
+      }
+
+      container.appendChild(particle);
+    }
+
+    // Função para gerar e baixar a imagem consolidada usando Canvas
+    document.getElementById('download-btn').addEventListener('click', () => {
+      const qrImg = document.getElementById('qr-image');
+      const bgImg = new Image();
+      bgImg.src = 'assets/mysterious_bg.png';
+
+      bgImg.onload = () => {
+        // Criar canvas com a resolução nativa da imagem de fundo
+        const canvas = document.createElement('canvas');
+        canvas.width = bgImg.naturalWidth;
+        canvas.height = bgImg.naturalHeight;
+        const ctx = canvas.getContext('2d');
+
+        // 1. Desenhar imagem de fundo
+        ctx.drawImage(bgImg, 0, 0);
+
+        // 2. Definir dimensões para o cartão branco do QR Code
+        // Ajustado proporcionalmente para caber perfeitamente no frame central
+        const qrSize = Math.min(canvas.width, canvas.height) * 0.28; 
+        const padding = qrSize * 0.08;
+        const cardSize = qrSize + padding * 2;
+        const cardX = (canvas.width - cardSize) / 2;
+        const cardY = (canvas.height - cardSize) / 2 - (canvas.height * 0.02); // levemente subido para centralizar no frame do design
+
+        // 3. Desenhar a sombra do cartão branco (glow neon rosa/roxo)
+        ctx.shadowColor = 'rgba(255, 65, 108, 0.6)';
+        ctx.shadowBlur = 40;
+        
+        // 4. Desenhar o cartão branco arredondado do QR Code
+        ctx.fillStyle = '#FFFFFF';
+        const radius = 24;
+        ctx.beginPath();
+        ctx.moveTo(cardX + radius, cardY);
+        ctx.lineTo(cardX + cardSize - radius, cardY);
+        ctx.quadraticCurveTo(cardX + cardSize, cardY, cardX + cardSize, cardY + radius);
+        ctx.lineTo(cardX + cardSize, cardY + cardSize - radius);
+        ctx.quadraticCurveTo(cardX + cardSize, cardY + cardSize, cardX + cardSize - radius, cardY + cardSize);
+        ctx.lineTo(cardX + radius, cardY + cardSize);
+        ctx.quadraticCurveTo(cardX, cardY + cardSize, cardX, cardY + cardSize - radius);
+        ctx.lineTo(cardX, cardY + radius);
+        ctx.quadraticCurveTo(cardX, cardY, cardX + radius, cardY);
+        ctx.closePath();
+        ctx.fill();
+
+        // Resetar sombras para os próximos desenhos
+        ctx.shadowBlur = 0;
+
+        // 5. Desenhar o código QR centralizado no cartão
+        const qrX = cardX + padding;
+        const qrY = cardY + padding;
+        ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+
+        // 6. Desenhar os textos de suspense no Canvas
+        ctx.textAlign = 'center';
+        
+        // Título
+        const titleFontSize = Math.round(canvas.height * 0.042);
+        ctx.font = `800 ${titleFontSize}px 'Outfit', 'Montserrat', sans-serif`;
+        const titleGradient = ctx.createLinearGradient(0, cardY + cardSize, 0, canvas.height);
+        titleGradient.addColorStop(0, '#FFFFFF');
+        titleGradient.addColorStop(1, '#ffc3d0');
+        ctx.fillStyle = titleGradient;
+        
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetY = 4;
+        
+        const titleY = cardY + cardSize + titleFontSize * 1.5;
+        ctx.fillText('Algo especial para você...', canvas.width / 2, titleY);
+
+        // Subtítulo
+        const subtitleFontSize = Math.round(canvas.height * 0.022);
+        ctx.font = `400 ${subtitleFontSize}px 'Montserrat', sans-serif`;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.shadowOffsetY = 2;
+        
+        const subtitleY = titleY + subtitleFontSize * 1.8;
+        ctx.fillText('Aponte a câmera do seu celular para descobrir.', canvas.width / 2, subtitleY);
+
+        // Coração (❤️)
+        const heartFontSize = Math.round(canvas.height * 0.03);
+        ctx.font = `${heartFontSize}px 'Montserrat', sans-serif`;
+        ctx.fillStyle = '#ff416c';
+        
+        const heartY = subtitleY + heartFontSize * 1.8;
+        ctx.fillText('❤️', canvas.width / 2, heartY);
+
+        // Resetar sombras
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetY = 0;
+
+        // 7. Fazer o download do arquivo consolidado
+        const link = document.createElement('a');
+        link.download = 'surpresa_misteriosa.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      };
+    });
+  </script>
+</body>
+</html>
