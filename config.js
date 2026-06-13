@@ -9,7 +9,7 @@
 window.COUPLE_CONFIG = {
   // Nomes do casal
   partner1: "Guilherme",
-  partner2: "Thalia",
+  partner2: "Thallia",
 
   // Data de início do relacionamento (Ano, Mês [0-11], Dia, Hora, Minuto)
   // Exemplo: 12 de Junho de 2024 às 20:00 -> new Date(2024, 5, 12, 20, 0)
